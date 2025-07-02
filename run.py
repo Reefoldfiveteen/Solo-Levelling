@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """
-Discord Auto‑Chat Bot (robust)
-==============================
-- Reads **config.ini**
-- Sends messages to a Discord channel, in random or sequential order
-- Works even if config values have trailing comments (e.g. `channel_id = 123 ; note`)
+Discord Auto‑Chat Bot (robust v2)
+================================
+- Ignores inline comments after `;` or `#` in *all* numeric & boolean fields
+- Sends random (`shuffle = true`) or sequential messages from a text file
 
 Run:
     python3 run.py
-Dependencies:
-    pip install -U discord.py
 """
 from __future__ import annotations
 
@@ -30,19 +27,29 @@ logging.basicConfig(
 )
 
 CONFIG_PATH = Path(__file__).with_name("config.ini")
-COMMENT_RE = re.compile(r"[;#].*$")  # strip anything after ; or #
+COMMENT_RE = re.compile(r"[;#].*$")  # strip trailing comments
 
 
 def clean(value: str) -> str:
-    """Return *value* without inline comments or surrounding whitespace."""
+    """Return *value* without inline comments or whitespace."""
     return COMMENT_RE.sub("", value).strip()
+
+
+def parse_bool(text: str, default: bool = True) -> bool:
+    """Convert *text* to bool after cleaning; fallback to *default* on empty."""
+    if text is None:
+        return default
+    text = clean(text).lower()
+    if text in {"1", "true", "yes", "on"}:
+        return True
+    if text in {"0", "false", "no", "off"}:
+        return False
+    return default
 
 
 def load_config() -> configparser.ConfigParser:
     if not CONFIG_PATH.exists():
-        raise FileNotFoundError(
-            f"Configuration file {CONFIG_PATH} not found. Create it via run.sh or manually."
-        )
+        raise FileNotFoundError(f"Configuration file {CONFIG_PATH} not found. Use run.sh or create manually.")
     cfg = configparser.ConfigParser()
     cfg.read(CONFIG_PATH)
     return cfg
@@ -51,12 +58,10 @@ def load_config() -> configparser.ConfigParser:
 def load_messages(file_path: Path) -> List[str]:
     if not file_path.exists():
         raise FileNotFoundError(f"Message file not found: {file_path}")
-    return [
-        line.strip() for line in file_path.read_text(encoding="utf-8").splitlines() if line.strip()
-    ]
+    return [line.strip() for line in file_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-async def chat_task(
+async def chat_loop(
     client: discord.Client,
     channel_id: int,
     messages: List[str],
@@ -66,41 +71,47 @@ async def chat_task(
     await client.wait_until_ready()
     channel = client.get_channel(channel_id)
     if channel is None:
-        logging.error("Channel ID %s not found", channel_id)
+        logging.error("Channel %s not found", channel_id)
         return
 
-    iterator = cycle(messages) if not shuffle else None
-    logging.info("Chat loop started (channel=%s, shuffle=%s, interval=%ss)", channel_id, shuffle, interval)
+    iterator = cycle(messages)
+    logging.info("Chat loop online → channel %s | shuffle=%s | every %ss", channel_id, shuffle, interval)
 
     while not client.is_closed():
         content = random.choice(messages) if shuffle else next(iterator)
         try:
             await channel.send(content)
             logging.info("Sent: %s", content)
-        except discord.HTTPException as exc:
-            logging.error("Send failed: %s", exc)
+        except discord.HTTPException as err:
+            logging.error("Discord error: %s", err)
         await asyncio.sleep(interval)
 
 
-def main():
+def main() -> None:
     cfg = load_config()
 
-    token = clean(cfg["discord"]["token"])
-    try:
-        channel_id = int(clean(cfg["discord"]["channel_id"]))
-    except ValueError as e:
-        raise ValueError(
-            "Invalid channel_id in config.ini – must be an integer (comments allowed after ';' or '#')."
-        ) from e
+    # ---------- Discord section ----------
+    token = clean(cfg["discord"].get("token", ""))
+    if not token:
+        raise ValueError("token missing in [discord] section of config.ini")
 
+    try:
+        channel_id = int(clean(cfg["discord"].get("channel_id", "0")))
+    except ValueError as err:
+        raise ValueError("channel_id must be an integer") from err
+    if channel_id == 0:
+        raise ValueError("channel_id missing in [discord] section of config.ini")
+
+    # ---------- Bot section ----------
     interval = int(clean(cfg["bot"].get("interval_seconds", "60")))
-    shuffle = cfg["bot"].getboolean("shuffle", fallback=True)
+    shuffle = parse_bool(cfg["bot"].get("shuffle", "true"), default=True)
     messages_file = Path(clean(cfg["bot"].get("messages_file", "messages.txt")))
 
     messages = load_messages(messages_file)
 
-    client = discord.Client(intents=discord.Intents.default())
-    client.loop.create_task(chat_task(client, channel_id, messages, interval, shuffle))
+    intents = discord.Intents.default()
+    client = discord.Client(intents=intents)
+    client.loop.create_task(chat_loop(client, channel_id, messages, interval, shuffle))
     client.run(token)
 
 
