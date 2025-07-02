@@ -1,11 +1,26 @@
 #!/usr/bin/env python3
 """
-Discord Auto‑Chat Bot (robust v2)
-================================
-- Ignores inline comments after `;` or `#` in *all* numeric & boolean fields
-- Sends random (`shuffle = true`) or sequential messages from a text file
+Discord Auto‑Chat Bot (simple)
+==============================
+Versi ringan tanpa opsi menu & tanpa flag "shuffle".
+Hanya membaca **config.ini** standar:
 
-Run:
+[discord]
+# bot token (wajib)
+token = YOUR_TOKEN
+# target channel ID (wajib)
+channel_id = 123456789012345678  ; bisa tambahkan komentar setelah ;
+
+[bot]
+interval_seconds = 60            ; jeda antar pesan
+messages_file   = messages.txt   ; file berisi 1 baris = 1 pesan
+
+— Fitur —
+• Pilih pesan secara acak dari `messages_file`.
+• Abaikan komentar setelah `;` atau `#` pada nilai numerik.
+• Log output ke stdout.
+
+Jalankan:
     python3 run.py
 """
 from __future__ import annotations
@@ -15,7 +30,6 @@ import configparser
 import logging
 import random
 import re
-from itertools import cycle
 from pathlib import Path
 from typing import List
 
@@ -23,97 +37,78 @@ import discord
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s %(levelname)s:%(name)s: %(message)s",
+    format="%(asctime)s [%(levelname)s] %(message)s",
 )
 
 CONFIG_PATH = Path(__file__).with_name("config.ini")
-COMMENT_RE = re.compile(r"[;#].*$")  # strip trailing comments
+COMMENT_RE = re.compile(r"[;#].*$")  # hapus komentar ujung baris
 
 
-def clean(value: str) -> str:
-    """Return *value* without inline comments or whitespace."""
+def clean(value: str | None) -> str:
+    """Hilangkan komentar & spasi."""
+    if value is None:
+        return ""
     return COMMENT_RE.sub("", value).strip()
 
 
-def parse_bool(text: str, default: bool = True) -> bool:
-    """Convert *text* to bool after cleaning; fallback to *default* on empty."""
-    if text is None:
-        return default
-    text = clean(text).lower()
-    if text in {"1", "true", "yes", "on"}:
-        return True
-    if text in {"0", "false", "no", "off"}:
-        return False
-    return default
-
-
-def load_config() -> configparser.ConfigParser:
-    if not CONFIG_PATH.exists():
-        raise FileNotFoundError(f"Configuration file {CONFIG_PATH} not found. Use run.sh or create manually.")
+def load_config() -> tuple[str, int, int, Path]:
     cfg = configparser.ConfigParser()
+    if not CONFIG_PATH.exists():
+        raise FileNotFoundError(f"config.ini tidak ditemukan di {CONFIG_PATH}")
     cfg.read(CONFIG_PATH)
-    return cfg
 
-
-def load_messages(file_path: Path) -> List[str]:
-    if not file_path.exists():
-        raise FileNotFoundError(f"Message file not found: {file_path}")
-    return [line.strip() for line in file_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-
-
-async def chat_loop(
-    client: discord.Client,
-    channel_id: int,
-    messages: List[str],
-    interval: int,
-    shuffle: bool,
-):
-    await client.wait_until_ready()
-    channel = client.get_channel(channel_id)
-    if channel is None:
-        logging.error("Channel %s not found", channel_id)
-        return
-
-    iterator = cycle(messages)
-    logging.info("Chat loop online → channel %s | shuffle=%s | every %ss", channel_id, shuffle, interval)
-
-    while not client.is_closed():
-        content = random.choice(messages) if shuffle else next(iterator)
-        try:
-            await channel.send(content)
-            logging.info("Sent: %s", content)
-        except discord.HTTPException as err:
-            logging.error("Discord error: %s", err)
-        await asyncio.sleep(interval)
-
-
-def main() -> None:
-    cfg = load_config()
-
-    # ---------- Discord section ----------
-    token = clean(cfg["discord"].get("token", ""))
+    token = clean(cfg["discord"].get("token"))
     if not token:
-        raise ValueError("token missing in [discord] section of config.ini")
+        raise ValueError("token di [discord] wajib diisi")
 
     try:
-        channel_id = int(clean(cfg["discord"].get("channel_id", "0")))
-    except ValueError as err:
-        raise ValueError("channel_id must be an integer") from err
-    if channel_id == 0:
-        raise ValueError("channel_id missing in [discord] section of config.ini")
+        channel_id = int(clean(cfg["discord"].get("channel_id")))
+    except (TypeError, ValueError):
+        raise ValueError("channel_id harus berupa integer")
 
-    # ---------- Bot section ----------
     interval = int(clean(cfg["bot"].get("interval_seconds", "60")))
-    shuffle = parse_bool(cfg["bot"].get("shuffle", "true"), default=True)
     messages_file = Path(clean(cfg["bot"].get("messages_file", "messages.txt")))
+    return token, channel_id, interval, messages_file
 
-    messages = load_messages(messages_file)
+
+def load_messages(path: Path) -> List[str]:
+    if not path.exists():
+        raise FileNotFoundError(f"File pesan tidak ditemukan: {path}")
+    lines = [ln.strip() for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    if not lines:
+        raise ValueError("messages_file kosong – isi setidaknya 1 baris pesan")
+    return lines
+
+
+async def main() -> None:
+    token, channel_id, interval, messages_path = load_config()
+    messages = load_messages(messages_path)
 
     intents = discord.Intents.default()
     client = discord.Client(intents=intents)
-    client.loop.create_task(chat_loop(client, channel_id, messages, interval, shuffle))
+
+    @client.event
+    async def on_ready():
+        channel = client.get_channel(channel_id)
+        if channel is None:
+            logging.error("Channel %s tidak ditemukan", channel_id)
+            await client.close()
+            return
+        logging.info("Bot online sebagai %s, posting ke #%s setiap %ss", client.user, channel_id, interval)
+        while not client.is_closed():
+            msg = random.choice(messages)
+            try:
+                await channel.send(msg)
+                logging.info("Kirim: %s", msg)
+            except discord.HTTPException as e:
+                logging.error("Gagal kirim: %s", e)
+            await asyncio.sleep(interval)
+
     client.run(token)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nDihentikan pengguna")
