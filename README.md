@@ -43,3 +43,8 @@ Bot akan login, lalu mengirim pesan acak setiap interval_seconds.
 
 Ingin 24×7?
 Deploy di screen, tmux, atau systemd service (contoh service unit sudah ada di header file).
+
+
+chmod +x run.sh   # sekali saja
+./run.sh          # buka menu, atur token, channel, jeda, dll
+python3 run.py    # jalankan bot
