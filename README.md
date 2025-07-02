@@ -84,3 +84,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - Inspired by the Discord API documentation.
 - Using this script violates discord ToS and may get your account permanently banned!.
+
+
+MENU
+chmod +x menu.sh   # (sekali saja)
+./menu.sh          # edit interaktif
