@@ -16,7 +16,7 @@ This is a simple Discord bot script that allows you to send messages to multiple
 
 1. **Clone the repository** (or download the script):
     ```bash
-    https://github.com/reefx998/Solo-Levelling.git
+    git clone https://github.com/reefx998/Solo-Levelling.git
     cd Solo-Levelling
     ```
 
