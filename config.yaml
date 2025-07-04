@@ -9,4 +9,9 @@ token_delay: 5  # Delay for each token processing in seconds
 message_delay: 2  # Delay for each message sent in seconds
 restart_delay: 10  # Delay before restarting the bot in seconds
 
-openai_api_key: "sk-XXXXXXXXXXXXXXXXXXXX"
+
+api_provider: gemini
+
+api_key: "AIzxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+model: "models/gemma-3-27b-it"
