@@ -87,5 +87,22 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 
 MENU
+```bash
 chmod +x menu.sh   # (sekali saja)
-./menu.sh          # edit interaktif
+./menu.sh          # edit interakti
+```
+
+token:
+  - "BOT_TOKEN_1"
+channel_id:
+  - "1300291026673729548"
+openai_api_key: "sk-XXXXXXXXXXXXXXXXXXXX"
+
+message_delay: 2
+restart_delay: 10
+Tak perlu .env atau python-dotenv lagi. Cukup:
+
+```bash
+pip install -U discord.py openai pyyaml
+python3 ai_auto_reply.py
+```
