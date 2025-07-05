@@ -1,110 +1,24 @@
-# Solo-Levelling (Discord)
+# Solo-Levelling (Discord AI AutoChat Bot)
 
-This is a simple Discord bot script that allows you to send messages to multiple channels using a list of messages stored in a text file. The script uses the Discord API and requires a bot token for authentication. This project is made based on main code of Simple DiscordBot by @recitativonika which you can find here. I https://github.com/recitativonika/Discord-auto-chat-py. This project is develops integrations with AI chat responses from Google Gemini Models, while maintaining the existing message randomizer function from chat.txt
+**Solo-Levelling** is a customizable and interactive Discord bot that sends automated messages from multiple accounts to multiple channels. It includes both **message randomization** from a `.txt` file and **AI-powered replies** using **Gemini Pro** (or your own AI API).
 
-## Features
+Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by @recitativonika, this project expands with AI integrations while preserving lightweight auto-chat functions.
 
-- Send messages from multiple account to multiple Discord channels.
-- Customize message delays and token processing.
-- Mesages with AI responses
-- Mesage will metion Discord user's chat
+---
 
-## Prerequisites
+## 🚀 Features
+
+- ✅ Send messages from multiple accounts to multiple channels
+- ✅ Custom delays for tokens, messages, and restarts
+- ✅ AI-generated responses via Gemini (Google AI)
+- ✅ Mentions users when replying with AI
+- ✅ Optional: random chat feature from `chat.txt`
+
+---
+
+## 🔧 Prerequisites
 
 - Python 3.6 or higher
-- Libraries: `requests`, `PyYAML`, `colorama`
-
-## Installation
-
-1. **Clone the repository** (or download the script):
-    ```bash
-    git clone https://github.com/Reefoldfiveteen/Solo-Levelling.git
-    cd Solo-Levelling
-    ```
-
-2. **Install the required libraries**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. **Edit `config.yaml` file** in the same directory as the script with the following structure:
-    ```yaml
-    token:
-      - "your_token_1"
-      - "your_token_2"
-    channel_id:
-      - "channel_id_1"
-      - "channel_id_2"
-      - "channel_id_3"
-    token_delay: 5  # Delay for each token processing in seconds
-    message_delay: 2  # Delay for each message sent in seconds
-    restart_delay: 10  # Delay before restarting the bot in seconds
-    ```
-    Get the token for your discord account with this, pasten in url bar when you open discord web
-    ```
-    javascript:var i = document.createElement('iframe');i.onload = function(){var localStorage = i.contentWindow.localStorage;prompt('Your discord token', localStorage.getItem('token').replace(/["]+/g, ''));};document.body.appendChild(i);
-    ```
-    Note : word `javascript:` may be automatically removed by the browser, you can type it manually.
-
-4. **Edit the `chat.txt` file** with the messages you want the bot to send. Each message should be on a new line.
-
-## Usage
-
-1. **Run the script**:
-    ```bash
-    python discord.py
-    ```
-
-2. **Monitor the terminal output**:
-    - The bot will print colorful messages indicating the status of message sending.
-    - If any errors occur, they will be displayed in red.
-
-3. **Customize your configuration**:
-    - You can modify the `config.yaml` file to add more tokens, channel IDs, and adjust delays as needed.
-
-## Example `chat.txt`
-
-Your `chat.txt` file might look like this:
-
-   ```
-   Hello there!
-   How's it going?
-   This is a random message.
-   Have a great day!
-   ```
-
-## Notes
-
-- Make sure your bot is invited to the channels you want to send messages to.
-- Ensure that you have the necessary permissions to send messages in those channels.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Acknowledgments
-
-- Inspired by the Discord API documentation.
-- Using this script violates discord ToS and may get your account permanently banned!.
-
-
-MENU
-```bash
-chmod +x menu.sh   # (sekali saja)
-./menu.sh          # edit interakti
-```
-
-token:
-  - "BOT_TOKEN_1"
-channel_id:
-  - "1300291026673729548"
-openai_api_key: "sk-XXXXXXXXXXXXXXXXXXXX"
-
-message_delay: 2
-restart_delay: 10
-Tak perlu .env atau python-dotenv lagi. Cukup:
-
-```bash
-pip install -U discord.py openai pyyaml
-python3 ai_auto_reply.py
-```
+- Required libraries:
+  ```bash
+  pip install -U discord.py openai pyyaml colorama
