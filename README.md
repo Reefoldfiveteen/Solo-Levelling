@@ -1,11 +1,13 @@
-# Simple DiscordBot
+# Solo-Discord-Levelling
 
-This is a simple Discord bot script that allows you to send messages to multiple channels using a list of messages stored in a text file. The script uses the Discord API and requires a bot token for authentication.
+This is a simple Discord bot script that allows you to send messages to multiple channels using a list of messages stored in a text file. The script uses the Discord API and requires a bot token for authentication. This project is made based on main code of Simple DiscordBot by @recitativonika which you can find here. I https://github.com/recitativonika/Discord-auto-chat-py. This project is develops integrations with AI chat responses from Google Gemini Models, while maintaining the existing message randomizer function from chat.txt
 
 ## Features
 
 - Send messages from multiple account to multiple Discord channels.
 - Customize message delays and token processing.
+- Mesages with AI responses
+- Mesage will metion Discord user's chat
 
 ## Prerequisites
 
@@ -16,7 +18,7 @@ This is a simple Discord bot script that allows you to send messages to multiple
 
 1. **Clone the repository** (or download the script):
     ```bash
-    git clone https://github.com/reefx998/Solo-Levelling.git
+    git clone https://github.com/Reefoldfiveteen/Solo-Levelling.git
     cd Solo-Levelling
     ```
 
