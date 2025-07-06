@@ -49,13 +49,16 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
     channel_id:
       - "channel_id_1"
       - "channel_id_2"
-    openai_api_key: "your-gemini-api-key"
+      - "channel_id_3"
+    token_delay: 5  # Delay for each token processing in seconds
+    message_delay: 2  # Delay for each message sent in seconds
+    restart_delay: 10  # Delay before restarting the bot in seconds
     
-    message_delay: 2
-    token_delay: 5
-    restart_delay: 10
+    api_provider: gemini
+    api_key: "AIzxxxxxxxxxxxxxxxxxxxxxxxxxxxx"    #Gemini API Key
+    model: "models/gemma-3-27b-it"    #your Gemini AI Model
     
-    random_chat: true     # Set to false if you only want AI replies
+    random_chat: true    # Set to false if you only want AI replies
     ```
 4. Fill chat.txt (used if random_chat: true):
     ```bash
