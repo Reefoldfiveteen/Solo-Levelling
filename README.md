@@ -104,7 +104,7 @@ javascript:var i = document.createElement('iframe');i.onload = function(){var lo
 ---
 
 ## 🛠 How to Run
-    python3 ai_auto_reply.py
+    python3 solo.py
 The bot will:
 * Auto-post messages from chat.txt (if random_chat: true)
 * Reply to users with Gemini AI (mentioning them)
