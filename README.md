@@ -34,7 +34,9 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
  ## 📦 Installation
 1.  Clone the repo:
     ```bash
-    git clone https://github.com/Reefoldfiveteen/Solo-Levelling_Discord-AI-AutoChat-Bot.git
+    git clone https://github.com/Reefoldfiveteen/Solo-Levelling_Discord-AI-AutoChat-Bot.git ./Solo-Levelling
+    ```
+    ```
     cd Solo-Levelling
     ```
 2. Install requirements:
