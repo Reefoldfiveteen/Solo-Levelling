@@ -7,12 +7,13 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
 ---
 
 ## 🚀 Features
-
-- ✅ Send messages from multiple accounts to multiple channels
-- ✅ Custom delays for tokens, messages, and restarts
-- ✅ AI-generated responses via Gemini (Google AI)
-- ✅ Mentions users when replying with AI
-- ✅ Optional: random chat feature from `chat.txt`
+✅ Send messages from **multiple accounts** to **multiple Discord channels**
+✅ **Custom delays** for tokens, messages, and restarts
+✅ **AI-generated responses** using **Gemini (Google Generative AI)**
+✅ **Mentions users** when replying with AI, for interactive conversations
+✅ **Optional random chat** feature using plain text messages from `chat.txt`
+✅ Define **AI personality and behavior** using `prompt.txt`
+✅ **Easy configuration** via `config.yaml` – no need for `.env` or `dotenv`
 
 ---
 
@@ -27,6 +28,8 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
   google-generativeai>=0.5.0
   discord.py>=2.3.2
   ```
+  
+---
 
  ## 📦 Installation
 1.  Clone the repo:
@@ -54,5 +57,75 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
     
     random_chat: true     # Set to false if you only want AI replies
     ```
-4. 
+4. Fill chat.txt (used if random_chat: true):
+    ```bash
+    Hello there!
+    How's it going?
+    What's up, bre?
+    I can't even read without scrolling!    
+    ```
+5. (Optional) Use menu editor:
+    ```bash
+    chmod +x menu.sh   # only once
+    ./menu.sh          # edit config interactively
+    ```
+      
+---
+
+## 🧠 Gemini API Key (AI)
+You’ll need a Gemini Pro key from Google AI Studio.
+No ```.env``` is needed — just put the key in ```config.yaml.```
+  
+---
+
+## 🧠 Prompt Customization (prompt.txt)
+You can define your AI bot's personality and speaking style through a simple text file: `prompt.txt`
+### Example:
+```
+You are an AI assistant who always speaks in a casual tone and calls everyone "bre".
+You must respond in English first. Keep your answers brief, but friendly.
+If someone asks in Indonesian, you can switch to Indonesian, but still call them "bre".
+Never say you are an AI assistant.
+```
+Tips:
+* The prompt is used every time the AI replies to a user message.
+* You can update the file anytime without restarting the bot.
+* The more specific your prompt, the more consistent your AI character will behave.
+  
+---
+
+## 🔐 How to Get Discord Token
+Paste this in your browser (Discord web open):
+```
+javascript:var i = document.createElement('iframe');i.onload = function(){var localStorage = i.contentWindow.localStorage;prompt('Your discord token', localStorage.getItem('token').replace(/["]+/g, ''));};document.body.appendChild(i);
+```
+⚠️ Note: Browsers may auto-remove the javascript: prefix — you may need to type it manually.
+  
+---
+
+## 🛠 How to Run
+    python3 ai_auto_reply.py
+The bot will:
+* Auto-post messages from chat.txt (if random_chat: true)
+* Reply to users with Gemini AI (mentioning them)
+* Log every action with colored terminal output
+  
+---
+
+## ⚠️ Disclaimer
+Using user tokens to automate actions **violates Discord ToS**.
+You **may be banned** or your account **terminated permanently**.
+**Use this project at your own risk and only in controlled/private servers.**
+  
+---
+
+## 📝 License
+This project is licensed under the MIT License. See [MIT LICENSE](https://github.com/Reefoldfiveteen/Solo-Levelling/blob/main/LICENSE) for full terms.
+  
+---
+
+## 🙏 Credits
+Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by @recitativonika, this project expands with AI integrations while preserving lightweight auto-chat functions.
+
+
 
