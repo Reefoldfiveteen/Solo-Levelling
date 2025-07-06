@@ -7,13 +7,13 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
 ---
 
 ## 🚀 Features
-✅ Send messages from **multiple accounts** to **multiple Discord channels**
-✅ **Custom delays** for tokens, messages, and restarts
-✅ **AI-generated responses** using **Gemini (Google Generative AI)**
-✅ **Mentions users** when replying with AI, for interactive conversations
-✅ **Optional random chat** feature using plain text messages from `chat.txt`
-✅ Define **AI personality and behavior** using `prompt.txt`
-✅ **Easy configuration** via `config.yaml` – no need for `.env` or `dotenv`
+- ✅ Send messages from **multiple accounts** to **multiple Discord channels**
+- ✅ **Custom delays** for tokens, messages, and restarts
+- ✅ **AI-generated responses** using **Gemini (Google Generative AI)**
+- ✅ **Mentions users** when replying with AI, for interactive conversations
+- ✅ **Optional random chat** feature using plain text messages from `chat.txt`
+- ✅ Define **AI personality and behavior** using `prompt.txt`
+- ✅ **Easy configuration** via `config.yaml` – no need for `.env` or `dotenv`
 
 ---
 
