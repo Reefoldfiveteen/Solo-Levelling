@@ -21,8 +21,8 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
 
 - Python 3.6 or higher
 - Required libraries:
-- requests>=2.31.0
   ```bash
+  requests>=2.31.0
   PyYAML>=6.0
   colorama>=0.4.6
   google-generativeai>=0.5.0
