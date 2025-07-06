@@ -2,7 +2,7 @@ import google.generativeai as genai, pkg_resources, json
 
 
 
-API_KEY = "AIzaSyASgUPnBR4YA8b09sL2dHa-D_BMZP-6_u4"
+API_KEY = "API"
 
 
 
