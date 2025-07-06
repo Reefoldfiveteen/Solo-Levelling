@@ -2,7 +2,7 @@
 
 **Solo-Levelling** is a customizable and interactive Discord bot that sends automated messages from multiple accounts to multiple channels. It includes both **message randomization** from a `.txt` file and **AI-powered replies** using **Gemini Pro** (or your own AI API).
 
-Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by @recitativonika, this project expands with AI integrations while preserving lightweight auto-chat functions.
+Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by [`@recitativonika`](https://github.com/recitativonika), this project expands with AI integrations while preserving lightweight auto-chat functions.
 
 ---
 
@@ -73,7 +73,7 @@ Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/D
 ---
 
 ## 🧠 Gemini API Key (AI)
-You’ll need a Gemini Pro key from Google AI Studio.
+You’ll need a Gemini Pro key from [`Google AI Studio`](https://makersuite.google.com/app/apikey).
 No ```.env``` is needed — just put the key in ```config.yaml.```
   
 ---
@@ -125,7 +125,7 @@ This project is licensed under the MIT License. See [MIT LICENSE](https://github
 ---
 
 ## 🙏 Credits
-Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by @recitativonika, this project expands with AI integrations while preserving lightweight auto-chat functions.
+Originally based on [`Discord-auto-chat-py`](https://github.com/recitativonika/Discord-auto-chat-py) by [`@recitativonika`](https://github.com/recitativonika), this project expands with AI integrations while preserving lightweight auto-chat functions.
 
 
 
